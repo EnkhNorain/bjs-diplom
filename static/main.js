@@ -56,7 +56,7 @@ class Profile {
 function getStocks() {
 	return setInterval(ApiConnector.getStocks( (err, data) => {
 		if (err) {
-			console.log('Failed to get stocks info');
+			console.log('Getting stoks info is failed');
 		} else {
 			console.log('Getting stocks info');
 		}
@@ -74,16 +74,21 @@ function main() {
 		password: 'ivan123'
 	});
 
+    const petya = new Profile({
+         username: 'petya',
+         name: { firstName: 'Petr', lastName: 'Petrov' },
+         password: 'petya123'
+     });
 
     
     ivan.createUser( (err, data) => {
 		if (err) {
-			console.log('Failed to create user');
+			console.log('Create user is failed');
 		} else {
 			console.log('Ivan is created!');
 			ivan.performLogin( (err, data) => {
 				if (err) {
-					console.log('Failed to login');
+					console.log('Login is failed');
 				} else {
 					console.log('Ivan is authorized');
 					ivan.addMoney({ currency: 'EUR', amount: 500000 }, (err, data) => {
@@ -95,10 +100,10 @@ function main() {
 								if (err) {
 									console.log('Error during conversion');
 								} else {
-									console.log('Converted to coins ', { name: {firstName: 'Ivan', lastName: 'Chernyshev'}, wallet: {amount: 36000, currency: 'NETCOIN'}, username: 'ivan' });
+									console.log('Converted to coins ', { name: {firstName: 'Ivan', lastName: 'Ivanov'}, wallet: {amount: 36000, currency: 'NETCOIN'}, username: 'ivan' });
 									ivan.transferMoney({ to: 'petya', amount: 36000 }, (err, data) => {
 										if (err) {
-											console.log('Failed to transfer 36000 Netcoins');
+											console.log('Transfer 36000 Netcoins is failed');
 										} else {
 											console.log('Petya has got 36000 Netcoins');
 										}
