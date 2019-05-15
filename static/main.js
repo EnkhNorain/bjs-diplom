@@ -15,7 +15,7 @@ class Profile {
 
 	return ApiConnector.createUser({username, name: { firstName, lastName },password},
 		
-	 (error, data) => {
+	 (err, data) => {
 	 console.log(`Creating user ${username}`);
 	 callback(err, data);
      });
@@ -53,17 +53,24 @@ class Profile {
 	}
 }
 
-function getStocks() {
-	return setInterval(ApiConnector.getStocks( (err, data) => {
-		if (err) {
-			console.log('Getting stoks info is failed');
-		} else {
-			console.log('Getting stocks info');
-		}
-	}), 1000);
+function getStocks(callback) {
+    return ApiConnector.getStocks((err, data) => {
+        console.log(`Getting stocks info`);
+        callback(err, data[0]);
+    });
 }
 
-getStocks();
+let stocks;
+
+getStocks((err, data) => {
+    if (err) {
+        console.error('Error during getting stocks info');
+    } else {
+        stocks = data;
+        console.log(`Actual stocks info is loading`);
+        console.log(data);
+    }
+});
 
 //Задача №2
 
@@ -85,27 +92,32 @@ function main() {
 		if (err) {
 			console.log('Create user is failed');
 		} else {
-			console.log('Ivan is created!');
+			console.log('ivan is created!');
 			ivan.performLogin( (err, data) => {
 				if (err) {
 					console.log('Login is failed');
 				} else {
-					console.log('Ivan is authorized');
+					console.log('ivan is authorized');
 					ivan.addMoney({ currency: 'EUR', amount: 500000 }, (err, data) => {
 						if (err) {
-							console.error('Error during adding money to Ivan');
+							console.error('Error during adding money to ivan');
 						} else {
-							console.log('Added 500000 euros to Ivan');
+							console.log('Added 500000 euros to ivan');
 							ivan.convertMoney({ fromCurrency: 'EUR', targetCurrency: 'NETCOIN', targetAmount: 36000 }, (err, data) => {
 								if (err) {
 									console.log('Error during conversion');
 								} else {
 									console.log('Converted to coins ', { name: {firstName: 'Ivan', lastName: 'Ivanov'}, wallet: {amount: 36000, currency: 'NETCOIN'}, username: 'ivan' });
+									      petya.createUser((err,data) => {
+                                                    if (err) {
+                                                        console.error('Create user is failed');
+                                                    } else {
+                                                        console.log(`petya is created`);
 									ivan.transferMoney({ to: 'petya', amount: 36000 }, (err, data) => {
 										if (err) {
 											console.log('Transfer 36000 Netcoins is failed');
 										} else {
-											console.log('Petya has got 36000 Netcoins');
+											console.log('petya has got 36000 Netcoins');
 										}
 									});
 								}
@@ -116,7 +128,7 @@ function main() {
 		    });
 		}
 	});
-
+  }
 }
 
 main();
